@@ -22,3 +22,19 @@ hr {
     margin: 5px 0 20px 0;
     width: 100%;
 }
+
+/* SWITCHES STYLE */
+
+.switchOption {
+    display: flex;
+    border: 1px solid #000;
+    border-radius: 30px;
+}
+
+.switchOption p {
+    margin: 2% 10px;
+}
+
+.switchOption input {
+    margin: 2% 10px;
+}
