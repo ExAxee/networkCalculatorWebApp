@@ -38,3 +38,8 @@ hr {
 .switchOption input {
     margin: 2% 10px;
 }
+
+.dataDisplayTable {
+    border: 1px solid black;
+}
+

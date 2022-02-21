@@ -67,7 +67,7 @@ async function processData (event) {
         data = [];
 
         for (const line of addressInput.value.trim().split("\n")) {
-            let [start, ...masks] = addressInput.value.trim().split("/");
+            let [start, ...masks] = line.trim().split("/");
 
             for (const mask of masks) {
                 rawData = await fetch(baseURL + "?q=" + start + "/" + mask).then(res=>res.text());
