@@ -8,5 +8,11 @@ submitBtn.addEventListener("click", processData);
 
 function processData (event) {
     event.preventDefault();
-    console.log("ciao");
+    outputDiv.innerHTML = "";
+    
+    if (addressInput.value.trim() != "") {
+        
+    } else {
+        outputDiv.innerHTML = "<h3>No input data</h3>";
+    }
 }
