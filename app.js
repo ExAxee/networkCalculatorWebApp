@@ -14,16 +14,18 @@ submitBtn.addEventListener("click", processData);
 
 function displayData (data) {
     console.log(data);
+    outputDiv.innerHTML = "";
     for (let subnet of data) {
-        const binary = subnet.address.includes("binary")
-        let tableTemp = `<table class='dataDisplayTable'>`;
+        const binary = subnet.address.hasOwnProperty("binary");
+        let tableTemp = `<table class='dataDisplayTable'><tbody>`;
 
         // add title
-        tableTemp += `<tr><td>NUMERICAL ADDRESS</td>`;
-        if (binary) tableTemp += `<td>BINARY ADDRESS</td>`;
+        tableTemp += `<tr><th>NUMERICAL ADDRESS</th>`;
+        if (binary) tableTemp += `<td class='vl'></td><th>BINARY ADDRESS</th>`;
         tableTemp += `</tr>`;
             
-            
+        // add address
+        tableTemp += `<tr><td>address</td>`;
             /*<td>BINARY ADDRESS</td></tr>
             <tr><th>address</th><td>${subnet.address["address"]}</td></tr>
         </table><hr>;*/
@@ -37,6 +39,7 @@ function displayData (data) {
 
         tableTemp += "</table><hr>"*/
 
+        tableTemp += `</tbody></table>`;
         outputDiv.innerHTML += tableTemp;
     }
 }
