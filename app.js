@@ -15,17 +15,34 @@ submitBtn.addEventListener("click", processData);
 function displayData (data) {
     console.log(data);
     for (let subnet of data) {
-        let rawData = subnet.address;
+        const binary = subnet.address.includes("binary")
+        let tableTemp = `<table class='dataDisplayTable'>`;
+
+        // add title
+        tableTemp += `<tr><td>NUMERICAL ADDRESS</td>`;
+        if (binary) tableTemp += `<td>BINARY ADDRESS</td>`;
+        tableTemp += `</tr>`;
+            
+            
+            /*<td>BINARY ADDRESS</td></tr>
+            <tr><th>address</th><td>${subnet.address["address"]}</td></tr>
+        </table><hr>;*/
+
+        /*let rawData = subnet.address;
         let tableTemp = "<table class='dataDisplayTable'>";
         
         for (let key of Object.keys(rawData)) {
-            tableTemp += "<tr><th>" + key + "</th><td>" + rawData[key] + "</td></tr>";
+            tableTemp += "<tr><th>" + convertKeyToString(key) + "</th><td>" + rawData[key] + "</td></tr>";
         }
 
-        tableTemp += "</table><hr>"
+        tableTemp += "</table><hr>"*/
 
         outputDiv.innerHTML += tableTemp;
     }
+}
+
+function convertKeyToString (key) {
+    return key.replaceAll("_", " ");
 }
 
 async function processData (event) {
