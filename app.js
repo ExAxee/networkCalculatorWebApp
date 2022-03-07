@@ -1,7 +1,6 @@
 // CHOSEN API: https://networkcalc.com/api/docs
-const baseURL = "https://networkcalc.com/api/ip/";
-const id      = "hbsKqE4wayhlhgfW";
-const secret  = "5QJG9AZJbl9Qcv15BoMWodMvtU34oXB4gy8VtMr1Oh84yEtNTLcNEWvuhcFC2CPy";
+// CORS PROXY: allorigins.win
+const baseURL = "https://api.allorigins.win/get?url=http://networkcalc.com/api/ip/";
 
 const addressInput = document.querySelector("#addressInput");
 const submitBtn    = document.querySelector("#submitBtn");
@@ -13,9 +12,23 @@ const binarySw     = document.querySelector("#binarySw");
 // add event listener
 submitBtn.addEventListener("click", processData);
 
+function displayData (data) {
+    console.log(data);
+    for (let subnet of data) {
+        let rawData = subnet.address;
+        let tableTemp = "<table class='dataDisplayTable'>";
+        
+        for (let key of Object.keys(rawData)) {
+            tableTemp += "<tr><th>" + key + "</th><td>" + rawData[key] + "</td></tr>";
+        }
 
+        tableTemp += "</table><hr>"
 
-function processData (event) {
+        outputDiv.innerHTML += tableTemp;
+    }
+}
+
+async function processData (event) {
     event.preventDefault();
     outputDiv.innerHTML = "";
     
@@ -30,19 +43,24 @@ function processData (event) {
             
             for (const mask of masks) {
                 data.push(
-                    fetch(
+                    await fetch(
                         baseURL + start + "/" + mask + "?" +
                         (binarySw.checked ? "binary=true" : "binary=false")
                     ).then(
-                        response => {return response.json()}
+                        // parse the CORS proxy data
+                        response => response.json()
                     ).then(
-                        x => data.push(x)
+                        // get the data
+                        response => response.contents
+                    ).then(
+                        // parse the final useful data
+                        response => JSON.parse(response)
                     )
-                );
+                )
             }
         }
 
-        console.log(data);
+        displayData(data);
     } else {
         outputDiv.innerHTML = "<h3>No input data</h3>";
     }
