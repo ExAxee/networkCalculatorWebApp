@@ -42,11 +42,24 @@ hr {
 }
 
 /* DATA TABLE STYLE */
+#calculatedData {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
 
 .dataDisplayTable {
     border: 1px solid black;
-    margin: 5px 0;
+    margin: 5px 5px;
     padding: 5px;
+
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+.dataDisplayTable td {
+    padding: 2px 5px;
 }
 
 .greyRow {
@@ -55,6 +68,5 @@ hr {
 
 .tableTitle {
     display: flex;
-    justify-content: center;
+    flex-flow: column;
 }
-

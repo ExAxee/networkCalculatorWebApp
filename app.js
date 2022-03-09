@@ -25,7 +25,11 @@ function displayData (data) {
             <div class='tableTitle'>
                 <span>
                     CIDR: ${subnet.address["cidr_notation"]};
+                </span>
+                <span>
                     subnet bits: ${subnet.address["subnet_bits"]};
+                </span>
+                <span>
                     assignable hosts: ${subnet.address["assignable_hosts"]}
                 </span>
             </div>
@@ -33,37 +37,37 @@ function displayData (data) {
                 <tr>
                     <th>DATA</th>
                     <th>DOTTED DECIMAL</th>
-                    <th>${binary ? `BINARY` : ``}</th>
+                    ${binary ? `<th>BINARY</th>` : ``}
                 </tr>
                 <tr class="greyRow">
                     <td>network address</td>
                     <td>${subnet.address["network_address"]}</td>
-                    <td>${binary ? subnet.address.binary["network_address"] : ``}</td>
+                    ${binary ? `<td>${subnet.address.binary["network_address"]}</td>` : ``}
                 </tr>
                 <tr>
                     <td>broadcast</td>
                     <td>${subnet.address["broadcast_address"]}</td>
-                    <td>${binary ? subnet.address.binary["broadcast_address"] : ``}</td>
+                    ${binary ? `<td>${subnet.address.binary["broadcast_address"]}</td>` : ``}
                 </tr>
                 <tr class="greyRow">
                     <td>first host</td>
                     <td>${subnet.address["first_assignable_host"]}</td>
-                    <td>${binary ? subnet.address.binary["first_assignable_host"] : ``}</td>
+                    ${binary ? `<td>${subnet.address.binary["first_assignable_host"]}` : ``}</td>
                 </tr>
                 <tr>
                     <td>last host</td>
                     <td>${subnet.address["last_assignable_host"]}</td>
-                    <td>${binary ? subnet.address.binary["last_assignable_host"] : ``}</td>
+                    ${binary ? `<td>${subnet.address.binary["last_assignable_host"]}</td>` : ``}
                 </tr>
                 <tr class="greyRow">
                     <td>subnet mask</td>
                     <td>${subnet.address["subnet_mask"]}</td>
-                    <td>${binary ? subnet.address.binary["subnet_mask"] : ``}</td>
+                    ${binary ? `<td>${subnet.address.binary["subnet_mask"]}</td>` : ``}
                 </tr>
                 <tr>
                     <td>wildcard mask</td>
                     <td>${subnet.address["wildcard_mask"]}</td>
-                    <td>${binary ? subnet.address.binary["wildcard_mask"] : ``}</td>
+                    ${binary ? `<td>${subnet.address.binary["wildcard_mask"]}</td>` : ``}
                 </tr>
             </table>
         </div>`;
