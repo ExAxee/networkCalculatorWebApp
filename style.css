@@ -41,12 +41,19 @@ hr {
 
 .dataDisplayTable {
     border: 1px solid black;
+    margin: 5px 0;
+    padding: 5px;
+}
+
+.tableTitle {
+    display: flex;
+    justify-content: center;
 }
 
 .vl {
     border-left: 1px solid black;
     height: 100%;
-    width: 0;
-    margin: 0 2px;
+    width: 1px;
+    margin: 0 5px;
 }
 

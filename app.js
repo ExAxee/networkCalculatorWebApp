@@ -10,7 +10,7 @@ const outputDiv    = document.querySelector("#calculatedData");
 const binarySw     = document.querySelector("#binarySw");
 
 // html constants
-const vl = `<td class='vl'></td>`;
+const vl = `<div  class='vl'></div>`;
 
 // add event listener
 submitBtn.addEventListener("click", processData);
@@ -21,29 +21,69 @@ function displayData (data) {
     // TODO  refactor table building using divs
     for (let subnet of data) {
         const binary = subnet.address.hasOwnProperty("binary");
-        let tableTemp = `<table class='dataDisplayTable'><tbody>`;
 
-        // add title
-        tableTemp += `<tr><th>NUMERICAL ADDRESS</th>`;
-        if (binary) tableTemp += `${vl}<th>BINARY ADDRESS</th>`;
-        tableTemp += `</tr>`;
-            
-        // add address
-        tableTemp += `<tr><td>address</td><td>${subnet.address["network_address"]}</td>`;
-            /*<td>BINARY ADDRESS</td></tr>
-            <tr><th>address</th><td>${subnet.address["address"]}</td></tr>
-        </table><hr>;*/
-
-        /*let rawData = subnet.address;
-        let tableTemp = "<table class='dataDisplayTable'>";
-        
-        for (let key of Object.keys(rawData)) {
-            tableTemp += "<tr><th>" + convertKeyToString(key) + "</th><td>" + rawData[key] + "</td></tr>";
-        }
-
-        tableTemp += "</table><hr>"*/
-
-        tableTemp += `</tbody></table>`;
+        // table has always 3 + 2 columns (2 for the vertical lines)
+        let tableTemp = `
+        <div class='dataDisplayTable'>
+            <div class='tableTitle'>
+                <span>
+                    CIDR: ${subnet.address["cidr_notation"]};
+                    subnet bits: ${subnet.address["subnet_bits"]};
+                    assignable hosts: ${subnet.address["assignable_hosts"]}
+                </span>
+            </div>
+            <table>
+                <tr>
+                    <th>DATA</th>
+                    <th>${vl}</th>
+                    <th>DOTTED DECIMAL</th>
+                    <th>${binary ? vl : ``}</th>
+                    <th>${binary ? `BINARY` : ``}</th>
+                </tr>
+                <tr>
+                    <td>network address</td>
+                    <td>${vl}</td>
+                    <td>${subnet.address["network_address"]}</td>
+                    <td>${binary ? vl : ``}</td>
+                    <td>${binary ? subnet.address.binary["network_address"] : ``}</td>
+                </tr>
+                <tr>
+                    <td>broadcast</td>
+                    <td>${vl}</td>
+                    <td>${subnet.address["broadcast_address"]}</td>
+                    <td>${binary ? vl : ``}</td>
+                    <td>${binary ? subnet.address.binary["broadcast_address"] : ``}</td>
+                </tr>
+                <tr>
+                    <td>first host</td>
+                    <td>${vl}</td>
+                    <td>${subnet.address["first_assignable_host"]}</td>
+                    <td>${binary ? vl : ``}</td>
+                    <td>${binary ? subnet.address.binary["first_assignable_host"] : ``}</td>
+                </tr>
+                <tr>
+                    <td>last host</td>
+                    <td>${vl}</td>
+                    <td>${subnet.address["last_assignable_host"]}</td>
+                    <td>${binary ? vl : ``}</td>
+                    <td>${binary ? subnet.address.binary["last_assignable_host"] : ``}</td>
+                </tr>
+                <tr>
+                    <td>subnet mask</td>
+                    <td>${vl}</td>
+                    <td>${subnet.address["subnet_mask"]}</td>
+                    <td>${binary ? vl : ``}</td>
+                    <td>${binary ? subnet.address.binary["subnet_mask"] : ``}</td>
+                </tr>
+                <tr>
+                    <td>wildcard mask</td>
+                    <td>${vl}</td>
+                    <td>${subnet.address["wildcard_mask"]}</td>
+                    <td>${binary ? vl : ``}</td>
+                    <td>${binary ? subnet.address.binary["wildcard_mask"] : ``}</td>
+                </tr>
+            </table>
+        </div>`;
         outputDiv.innerHTML += tableTemp;
     }
 }
