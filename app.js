@@ -23,10 +23,12 @@ function displayData (data) {
         const binary = binarySw.checked;
 
         if (subnet.status == "error") {
-            outputDiv += 
+            outputDiv.innerHTML += 
                 `<div class='dataDisplayTable'>
                     <span>${subnet.error}</span>
                 </div>`;
+        } else if (subnet.status == "line") {
+            outputDiv.innerHTML += `<hr>`;
         } else if (subnet.status == "ok") {
             let tableTemp = 
                 `<div class='dataDisplayTable'>
@@ -171,6 +173,7 @@ async function processData (event) {
 
                 displayData(data);
             }
+            data.push({status: "line"});
         }
     } else {
         outputDiv.innerHTML = "<h3>No input data</h3>";
