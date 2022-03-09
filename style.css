@@ -7,7 +7,7 @@ body {
 }
 
 hr {
-    width: 75%;
+    width: 90%;
 }
 
 /* INPUT FIELD STYLE */
@@ -17,7 +17,7 @@ hr {
     flex-flow: column;
     align-items: center;
 
-    width: 75%;
+    width: 90%;
 }
 
 #addressInput {
