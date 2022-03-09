@@ -9,9 +9,6 @@ const outputDiv    = document.querySelector("#calculatedData");
 // switches
 const binarySw     = document.querySelector("#binarySw");
 
-// html constants
-const vl = `<div  class='vl'></div>`;
-
 // add event listener
 submitBtn.addEventListener("click", processData);
 
@@ -35,51 +32,37 @@ function displayData (data) {
             <table>
                 <tr>
                     <th>DATA</th>
-                    <th>${vl}</th>
                     <th>DOTTED DECIMAL</th>
-                    <th>${binary ? vl : ``}</th>
                     <th>${binary ? `BINARY` : ``}</th>
                 </tr>
-                <tr>
+                <tr class="greyRow">
                     <td>network address</td>
-                    <td>${vl}</td>
                     <td>${subnet.address["network_address"]}</td>
-                    <td>${binary ? vl : ``}</td>
                     <td>${binary ? subnet.address.binary["network_address"] : ``}</td>
                 </tr>
                 <tr>
                     <td>broadcast</td>
-                    <td>${vl}</td>
                     <td>${subnet.address["broadcast_address"]}</td>
-                    <td>${binary ? vl : ``}</td>
                     <td>${binary ? subnet.address.binary["broadcast_address"] : ``}</td>
                 </tr>
-                <tr>
+                <tr class="greyRow">
                     <td>first host</td>
-                    <td>${vl}</td>
                     <td>${subnet.address["first_assignable_host"]}</td>
-                    <td>${binary ? vl : ``}</td>
                     <td>${binary ? subnet.address.binary["first_assignable_host"] : ``}</td>
                 </tr>
                 <tr>
                     <td>last host</td>
-                    <td>${vl}</td>
                     <td>${subnet.address["last_assignable_host"]}</td>
-                    <td>${binary ? vl : ``}</td>
                     <td>${binary ? subnet.address.binary["last_assignable_host"] : ``}</td>
                 </tr>
-                <tr>
+                <tr class="greyRow">
                     <td>subnet mask</td>
-                    <td>${vl}</td>
                     <td>${subnet.address["subnet_mask"]}</td>
-                    <td>${binary ? vl : ``}</td>
                     <td>${binary ? subnet.address.binary["subnet_mask"] : ``}</td>
                 </tr>
                 <tr>
                     <td>wildcard mask</td>
-                    <td>${vl}</td>
                     <td>${subnet.address["wildcard_mask"]}</td>
-                    <td>${binary ? vl : ``}</td>
                     <td>${binary ? subnet.address.binary["wildcard_mask"] : ``}</td>
                 </tr>
             </table>
