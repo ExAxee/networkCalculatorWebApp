@@ -12,12 +12,15 @@ const binarySw     = document.querySelector("#binarySw");
 // add event listener
 submitBtn.addEventListener("click", processData);
 
+// data holder
+let data = [];
+
 function displayData (data) {
-    console.log(data);
     outputDiv.innerHTML = "";
     // TODO  refactor table building using divs
     for (let subnet of data) {
-        const binary = subnet.address.hasOwnProperty("binary");
+        //const binary = subnet.address.hasOwnProperty("binary");
+        const binary = binarySw.checked;
 
         // table has always 3 + 2 columns (2 for the vertical lines)
         let tableTemp = `
@@ -95,8 +98,7 @@ async function processData (event) {
             for (const mask of masks) {
                 data.push(
                     await fetch(
-                        baseURL + start + "/" + mask + "?" +
-                        (binarySw.checked ? "binary=true" : "binary=false")
+                        baseURL + start + "/" + mask + "?binary=true"
                     ).then(
                         // parse the CORS proxy data
                         response => response.json()
