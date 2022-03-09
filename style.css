@@ -10,6 +10,8 @@ hr {
     width: 75%;
 }
 
+/* INPUT FIELD STYLE */
+
 .inputData {
     display: flex;
     flex-flow: column;
@@ -31,7 +33,7 @@ hr {
     border-radius: 30px;
 }
 
-.switchOption p {
+.switchOption span {
     margin: 2% 10px;
 }
 
@@ -39,21 +41,20 @@ hr {
     margin: 2% 10px;
 }
 
+/* DATA TABLE STYLE */
+
 .dataDisplayTable {
     border: 1px solid black;
     margin: 5px 0;
     padding: 5px;
 }
 
+.greyRow {
+    background-color: rgb(197, 196, 196);
+}
+
 .tableTitle {
     display: flex;
     justify-content: center;
-}
-
-.vl {
-    border-left: 1px solid black;
-    height: 100%;
-    width: 1px;
-    margin: 0 5px;
 }
 
