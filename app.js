@@ -125,7 +125,7 @@ async function processData (event) {
                 if (temp.status == "INVALID_ADDRESS") {
                     data.push({
                         status: "error",
-                        error: `invalid address ${requestURL}`
+                        error: `invalid address ${start + "/" + masks[i]}`
                     });
                 } else if (temp.status == "OK") {
                     try {
