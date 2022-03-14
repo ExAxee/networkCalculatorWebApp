@@ -31,6 +31,9 @@ hr {
     display: flex;
     border: 1px solid #000;
     border-radius: 30px;
+    justify-content: space-between;
+    width: max-content;
+    align-self: center;
 }
 
 .switchOption span {
@@ -67,6 +70,11 @@ hr {
 }
 
 .tableTitle {
+    display: flex;
+    flex-flow: column;
+}
+
+.titleHolder {
     display: flex;
     flex-flow: column;
 }

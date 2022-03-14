@@ -18,7 +18,8 @@ let data = [];
 function displayData (data) {
     outputDiv.innerHTML = "";
     // TODO  refactor table building using divs
-    for (let subnet of data) {
+    for (let i = 0; i < data.length; i++) {
+        var subnet = data[i];
         //const binary = subnet.address.hasOwnProperty("binary");
         const binary = binarySw.checked;
 
@@ -31,17 +32,23 @@ function displayData (data) {
             outputDiv.innerHTML += `<hr>`;
         } else if (subnet.status == "ok") {
             let tableTemp = 
-                `<div class='dataDisplayTable'>
-                    <div class='tableTitle'>
-                        <span>
-                            CIDR: ${subnet.data.address["cidr_notation"]};
-                        </span>
-                        <span>
-                            subnet bits: ${subnet.data.address["subnet_bits"]};
-                        </span>
-                        <span>
-                            assignable hosts: ${subnet.data.address["assignable_hosts"]}
-                        </span>
+                `<div class='dataDisplayTable' id='data-${i}'>
+                    <div class='titleHolder'>
+                        <div class='tableTitle'>
+                            <span>
+                                CIDR: ${subnet.data.address["cidr_notation"]};
+                            </span>
+                            <span>
+                                subnet bits: ${subnet.data.address["subnet_bits"]};
+                            </span>
+                            <span>
+                                assignable hosts: ${subnet.data.address["assignable_hosts"]}
+                            </span>
+                        </div>
+                        <div class='switchOption'>
+                            <span>show data</span>
+                            <input type='checkbox' id='dataSw-${i}' />
+                        </div>
                     </div>
                     <table>
                         <tr>
@@ -81,7 +88,9 @@ function displayData (data) {
                         </tr>
                     </table>
                 </div>`;
+            
             outputDiv.innerHTML += tableTemp;
+            document.querySelector(`#dataSw-${i}`).addEventListener("click", updateDataView);
         } else {
             outputDiv += 
                 `<div class='dataDisplayTable'>
@@ -91,8 +100,8 @@ function displayData (data) {
     }
 }
 
-function convertKeyToString (key) {
-    return key.replaceAll("_", " ");
+function updateDataView (evt) {
+    evt.preventDefault();
 }
 
 async function processData (event) {
