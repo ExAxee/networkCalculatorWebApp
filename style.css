@@ -59,6 +59,7 @@ hr {
     display: flex;
     flex-flow: column;
     align-items: center;
+    align-self: flex-start;
 }
 
 .dataDisplayTable td {
