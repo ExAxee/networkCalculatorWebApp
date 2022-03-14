@@ -47,10 +47,10 @@ function displayData (data) {
                         </div>
                         <div class='switchOption'>
                             <span>show data</span>
-                            <input type='checkbox' id='dataSw-${i}' />
+                            <input type='checkbox' id='dataSw-${i}' onchange='updateDataView(${i})'/>
                         </div>
                     </div>
-                    <table>
+                    <table class='hidden'>
                         <tr>
                             <th>DATA</th>
                             <th>DOTTED DECIMAL</th>
@@ -90,7 +90,6 @@ function displayData (data) {
                 </div>`;
             
             outputDiv.innerHTML += tableTemp;
-            document.querySelector(`#dataSw-${i}`).addEventListener("click", updateDataView);
         } else {
             outputDiv += 
                 `<div class='dataDisplayTable'>
@@ -100,8 +99,11 @@ function displayData (data) {
     }
 }
 
-function updateDataView (evt) {
-    evt.preventDefault();
+function updateDataView (id) {
+    if (document.querySelector(`#dataSw-${id}`).checked)
+        document.querySelector(`#data-${id} table`).classList = [];
+    else
+        document.querySelector(`#data-${id} table`).classList = ["hidden"];
 }
 
 async function processData (event) {

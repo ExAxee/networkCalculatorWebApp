@@ -78,3 +78,9 @@ hr {
     display: flex;
     flex-flow: column;
 }
+
+/* TABLE VIEW CLASS */
+
+.hidden {
+    visibility: collapse;
+}
