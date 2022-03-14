@@ -83,5 +83,5 @@ hr {
 /* TABLE VIEW CLASS */
 
 .hidden {
-    visibility: collapse;
+    display: none;
 }

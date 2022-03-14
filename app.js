@@ -17,6 +17,7 @@ let data = [];
 
 function displayData (data) {
     outputDiv.innerHTML = "";
+    let swId = 0;
     // TODO  refactor table building using divs
     for (let i = 0; i < data.length; i++) {
         var subnet = data[i];
@@ -31,8 +32,10 @@ function displayData (data) {
         } else if (subnet.status == "line") {
             outputDiv.innerHTML += `<hr>`;
         } else if (subnet.status == "ok") {
+            document.querySelector("#dataControl").classList = [];
+
             let tableTemp = 
-                `<div class='dataDisplayTable' id='data-${i}'>
+                `<div class='dataDisplayTable' id='data-${swId}'>
                     <div class='titleHolder'>
                         <div class='tableTitle'>
                             <span>
@@ -47,7 +50,7 @@ function displayData (data) {
                         </div>
                         <div class='switchOption'>
                             <span>show data</span>
-                            <input type='checkbox' id='dataSw-${i}' onchange='updateDataView(${i})'/>
+                            <input type='checkbox' name='dataSw' id='dataSw-${swId}' onchange='updateDataView(${swId})'/>
                         </div>
                     </div>
                     <table class='hidden'>
@@ -90,12 +93,29 @@ function displayData (data) {
                 </div>`;
             
             outputDiv.innerHTML += tableTemp;
+            swId++;
         } else {
             outputDiv += 
                 `<div class='dataDisplayTable'>
                     <span>${subnet}</span>
                 </div>`;
         }
+    }
+}
+
+function expandAllData () {
+    const switches = document.querySelectorAll('input[name=dataSw]')
+    for (var i = 0; i < switches.length; i++) {
+        switches[i].checked = true;
+        updateDataView(i);
+    }
+}
+
+function collapseAllData () {
+    const switches = document.querySelectorAll('input[name=dataSw]')
+    for (var i = 0; i < switches.length; i++) {
+        switches[i].checked = false;
+        updateDataView(i);
     }
 }
 
