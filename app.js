@@ -1,6 +1,5 @@
 // CHOSEN API: https://networkcalc.com/api/docs
-// CORS PROXY: allorigins.win
-const baseURL = "https://api.allorigins.win/get?url=http://networkcalc.com/api/ip/";
+const baseURL = "http://networkcalc.com/api/ip/";
 
 const addressInput = document.querySelector("#addressInput");
 const submitBtn    = document.querySelector("#submitBtn");
@@ -143,14 +142,8 @@ async function processData (event) {
                 const requestURL = baseURL + start + "/" + masks[i] + "?binary=true";
 
                 var temp = await fetch(requestURL).then(
-                    // parse the CORS proxy data
-                    response => response.json()
-                ).then(
-                    // get the data
-                    response => response.contents
-                ).then(
                     // parse the final useful data
-                    response => JSON.parse(response)
+                    response => response.json()
                 );
                 
                 if (temp.status == "INVALID_ADDRESS") {
