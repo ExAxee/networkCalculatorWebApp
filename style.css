@@ -12,9 +12,16 @@ hr {
 
 /* INPUT FIELD STYLE */
 
-.inputData {
+header {
+    width: 75%;
+
     display: flex;
     flex-flow: column;
+    align-items: center;
+}
+
+.inputArea {
+    display: flex;
     align-items: center;
 
     width: 90%;

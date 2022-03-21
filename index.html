@@ -10,18 +10,31 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>SUBNET CALCULATOR</h1>
+    <header>
+        <h1>SUBNET CALCULATOR</h1>
 
-    <div class="inputData">
         <h4>Enter starting IPs with all masks on same line divided by a '/'</h4>
-        <textarea id="addressInput" name="Address Input" placeholder="e.g. 192.168.1.12/25/26/27; 192.155.12.2/28/29/30"></textarea>
+
+        <div class="inputArea">
+            <div class="guidedInput">
+                <form>
+                    <span>
+                        <label>starting address: </label>
+                        <input type="text">    
+                    </span>
+                </form>
+            </div>
+
+            <textarea id="addressInput" name="Address Input" placeholder="e.g. 192.168.1.12/25/26/27; 192.155.12.2/28/29/30" ></textarea>
+        </div>
+
         <button id="submitBtn">calculate subnets data</button>
         
         <span class="switchOption">
             <span>Show binary</span>
             <input class="checkBox" id="binarySw" type="checkbox" onchange="displayData(data)"/>
         </span>
-    </div>
+    </header>
 
     <hr>
 
