@@ -1,5 +1,5 @@
 // CHOSEN API: https://networkcalc.com/api/docs
-const baseURL = "http://networkcalc.com/api/ip/";
+const baseURL = "https://networkcalc.com/api/ip/";
 
 const addressInput = document.querySelector("#addressInput");
 const submitBtn    = document.querySelector("#submitBtn");
