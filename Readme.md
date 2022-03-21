@@ -6,5 +6,4 @@ To calculate another subnet insert another row as before.
 
 Used APIs:
 - [networkcalc](http://networkcalc.com/) for the calculation
-- [allorigin](https://allorigins.win) for the CORS proxy
  
