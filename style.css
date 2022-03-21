@@ -27,6 +27,24 @@ header {
     width: 90%;
 }
 
+.guidedInput {
+    display: flex;
+    flex-flow: column;
+    flex-shrink: 0;
+}
+
+.guidedInput span {
+    display: flex;
+    justify-content: space-between;
+
+    margin: 1px 5px;
+}
+
+.guidedInput span input {
+    border: 0;
+    border-bottom: 1px solid black;
+}
+
 #addressInput {
     margin: 5px 0 20px 0;
     width: 100%;
