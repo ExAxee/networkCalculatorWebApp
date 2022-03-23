@@ -141,22 +141,39 @@ function addDataInput (event) {
 
     // retrieve data
     const numberOfNets = guidedInput.numberOfNets.value.trim();
-    const startingNet = guidedInput.startAddr.value.trim();
-    const mask = guidedInput.mask.value.trim();
+    const startingNet  = guidedInput.startAddr.value.trim();
+    const mask         = guidedInput.mask.value.trim();
 
     // define regex pattern for address checking
     //                  | ------------- byte 0 ------------- |    | ------------- byte 1 ------------- |    | ------------- byte 2 ------------- |    | ------------- byte 3 ------------- |
     const pattern = /^\b([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\.\b([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\.\b([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\.\b([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5])$/;
 
-    // check data
-    if (isNaN(numberOfNets) || !numberOfNets ) guidedInput.numberOfNets.classList.add("inputError");
-    else guidedInput.numberOfNets.classList.remove("inputError");
+    // check mask bit number input
+    if (
+        isNaN(mask) || !mask || mask <= 0 || mask > 32
+    ) {
+        guidedInput.mask.classList.add("inputError");
+    } else {
+        guidedInput.mask.classList.remove("inputError");
+    }
 
-    if (isNaN(mask) || !mask ) guidedInput.mask.classList.add("inputError");
-    else guidedInput.mask.classList.remove("inputError");
+    // check starting network input
+    if (
+        !pattern.test(startingNet)
+    ) {
+        guidedInput.startAddr.classList.add("inputError");
+    } else {
+        guidedInput.startAddr.classList.remove("inputError");
+    }
 
-    if (!pattern.test(startingNet)) guidedInput.startAddr.classList.add("inputError");
-    else guidedInput.startAddr.classList.remove("inputError");
+    // check number of requested networks input
+    if (
+        isNaN(numberOfNets) || !numberOfNets
+    ) {
+        guidedInput.numberOfNets.classList.add("inputError");
+    } else {
+        guidedInput.numberOfNets.classList.remove("inputError");
+    }
 
     var tempval = `${startingNet}/${mask}*${numberOfNets}\n`;
     console.log(startingNet)
