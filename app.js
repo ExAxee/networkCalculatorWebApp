@@ -3,13 +3,24 @@ const baseURL = "https://networkcalc.com/api/ip/";
 
 const addressInput = document.querySelector("#addressInput");
 const submitBtn    = document.querySelector("#submitBtn");
+
 const outputDiv    = document.querySelector("#calculatedData");
 
+const guidedInput = {
+    numberOfNets: document.querySelector("#guidedInputNumberOfNets"),
+    startAddr:    document.querySelector("#guidedInputStartAddress"),
+    mask:         document.querySelector("#guidedInputMask"),
+
+    submitBtn: document.querySelector("#guidedInputSubmit"),
+    resetBtn:  document.querySelector("#guidedInputReset"),
+}
+
 // switches
-const binarySw     = document.querySelector("#binarySw");
+const binarySw = document.querySelector("#binarySw");
 
 // add event listener
 submitBtn.addEventListener("click", processData);
+guidedInput.submitBtn.addEventListener("click", addDataInput);
 
 // data holder
 let data = [];
@@ -124,6 +135,32 @@ function updateDataView (id) {
     else
         document.querySelector(`#data-${id} table`).classList = ["hidden"];
 }
+
+function addDataInput (event) {
+    event.preventDefault();
+
+    // retrieve data
+    const numberOfNets = guidedInput.numberOfNets.value.trim();
+    const startingNet = guidedInput.startAddr.value.trim();
+    const mask = guidedInput.mask.value.trim();
+
+    // define regex pattern for address checking
+    //                  | ------------- byte 0 ------------- |    | ------------- byte 1 ------------- |    | ------------- byte 2 ------------- |    | ------------- byte 3 ------------- |
+    const pattern = /^\b([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\.\b([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\.\b([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\.\b([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5])$/;
+
+    // check data
+    if (isNaN(numberOfNets) || !numberOfNets ) guidedInput.numberOfNets.classList.add("inputError");
+    else guidedInput.numberOfNets.classList.remove("inputError");
+
+    if (isNaN(mask) || !mask ) guidedInput.mask.classList.add("inputError");
+    else guidedInput.mask.classList.remove("inputError");
+
+    if (!pattern.test(startingNet)) guidedInput.startAddr.classList.add("inputError");
+    else guidedInput.startAddr.classList.remove("inputError");
+
+    var tempval = `${startingNet}/${mask}*${numberOfNets}\n`;
+    console.log(startingNet)
+} 
 
 async function processData (event) {
     event.preventDefault();

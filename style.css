@@ -49,6 +49,11 @@ header {
     border-bottom: 1px solid black;
 }
 
+.guidedInputField .inputError {
+    border: 0;
+    border-bottom: 1px solid red;
+}
+
 .guidedInputControls {
     display: flex;
     flex-flow: row;
