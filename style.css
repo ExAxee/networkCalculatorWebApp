@@ -125,3 +125,10 @@ header {
 .hidden {
     display: none;
 }
+
+/* INPUT NOTE CLASS */
+
+.inputNote {
+    font-size: small;
+    width: 45%;
+}
