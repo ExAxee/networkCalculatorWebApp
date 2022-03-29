@@ -7,6 +7,7 @@ export class Address {
 
     static isNetID (addr, mask) {
         if (!Address.isValid(addr)) throw new Error(`invalid address input: ${addr} is not a valid dotted-decimal address`);
+        if (!mask | isNaN(mask) | mask > 32 | mask <= 0) throw new Error(`invalid mask input: ${mask}`);
 
         return 0 == (Address.dtob(addr) & BigInt(Math.pow(2, 32 - mask) - 1));
     }
