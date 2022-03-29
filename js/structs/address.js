@@ -1,3 +1,5 @@
+import { OverflowError } from './exceptions.js';
+
 export class Address {
     static addressMatcher = /^(\b([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\.){3}\b([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5])$/;
 
@@ -16,17 +18,15 @@ export class Address {
         if (!Address.isNetID(addr, mask)) throw new Error(`invalid address input: ${addr}/${mask} is not a valid netID`);
 
         var baddr = Address.dtob(addr);
+        var nextID = baddr + BigInt( Math.pow(2, 32 - mask) );
 
-        return getInBigInt ?
-            baddr + BigInt(
-                Math.pow(2, 32 - mask)
-            )
-            :
-            Address.btod(
-                baddr + BigInt(
-                    Math.pow(2, 32 - mask)
-                )
-            );
+        console.log(baddr);
+        console.log(nextID);
+
+        // overflow has occurred
+        if (nextID > Address.dtob("255.255.255.255")) throw new OverflowError("next network ID has overflowed");
+
+        return getInBigInt ? nextID : Address.btod(nextID);
     }
 
     // Dotted TO BigInt
