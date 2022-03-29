@@ -1,5 +1,13 @@
-export class entryList {
-    // TODO: complete array struct
+export class EntryList {
+    subnets = [];
+
+    constructor (subnetList) {
+        for (let i = 0; i < subnetList.length; i++) {
+            if (!(subnetList[i] instanceof Subnet)) throw new Error(`invalid subnet at index ${i}: ${subnetList[i]} in ${subnetList}`);
+
+            this.subnets.push(subnetList[i]);
+        }
+    }
 }
 
 export class AddressField {
