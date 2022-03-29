@@ -12,6 +12,23 @@ export class Address {
         return 0 == (Address.dtob(addr) & BigInt(Math.pow(2, 32 - mask) - 1));
     }
 
+    static calculateNextNetID (addr, mask, getInBigInt = false) {
+        if (!Address.isNetID(addr, mask)) throw new Error(`invalid address input: ${addr}/${mask} is not a valid netID`);
+
+        var baddr = Address.dtob(addr);
+
+        return getInBigInt ?
+            baddr + BigInt(
+                Math.pow(2, 32 - mask)
+            )
+            :
+            Address.btod(
+                baddr + BigInt(
+                    Math.pow(2, 32 - mask)
+                )
+            );
+    }
+
     // Dotted TO BigInt
     static dtob (addr) {
         if (!Address.isValid(addr)) throw new Error(`invalid address input: ${addr} is not a valid dotted-decimal address`);
