@@ -1,4 +1,4 @@
-import { Address } from "/js/structs/address.js";
+import { Address } from "./structs/address.js";
 
 // CHOSEN API: https://networkcalc.com/api/docs
 const baseURL = "https://networkcalc.com/api/ip/";
@@ -26,6 +26,15 @@ guidedInput.submitBtn.addEventListener("click", addDataInput);
 
 // data holder
 let data = [];
+
+// after initializing attach used functions to main window
+window.displayData     = displayData;
+window.expandAllData   = expandAllData;
+window.collapseAllData = collapseAllData;
+window.updateDataView  = updateDataView;
+window.addDataInput    = addDataInput;
+window.processData     = processData;
+window.data            = data;
 
 function displayData (data) {
     outputDiv.innerHTML = "";
@@ -107,7 +116,7 @@ function displayData (data) {
             outputDiv.innerHTML += tableTemp;
             swId++;
         } else {
-            outputDiv += 
+            outputDiv.innerHTML += 
                 `<div class='dataDisplayTable'>
                     <span>${subnet}</span>
                 </div>`;
@@ -146,10 +155,6 @@ function addDataInput (event) {
     const startingNet  = guidedInput.startAddr.value.trim();
     const mask         = guidedInput.mask.value.trim();
 
-    // define regex pattern for address checking
-    //                  | ------------- byte 0 ------------- |    | ------------- byte 1 ------------- |    | ------------- byte 2 ------------- |    | ------------- byte 3 ------------- |
-    const pattern = /^\b([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\.\b([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\.\b([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\.\b([01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5])$/;
-
     // check mask bit number input
     if (
         isNaN(mask) || !mask || mask <= 0 || mask > 32
@@ -161,7 +166,7 @@ function addDataInput (event) {
 
     // check starting network input
     if (
-        !pattern.test(startingNet)
+        !Address.isNetID(startingNet, mask) // don't check if address is valid because Address.isNetID checks it
     ) {
         guidedInput.startAddr.classList.add("inputError");
     } else {
@@ -177,7 +182,7 @@ function addDataInput (event) {
         guidedInput.numberOfNets.classList.remove("inputError");
     }
 
-    var tempval = `${startingNet}/${mask}*${numberOfNets}\n`;
+    addressInput.value += `${startingNet}/${mask}*${numberOfNets}\n`;
     console.log(startingNet)
 } 
 
@@ -186,14 +191,15 @@ async function processData (event) {
     outputDiv.innerHTML = "";
     
     if (addressInput.value.trim() != "") {
-        raw  = addressInput.value.trim();
+        var raw  = addressInput.value.trim();
         data = []
         
-        // cycle trhough subnet entries
+        // cycle through subnet entries
         for (const line of raw.split("\n")) {
-            //split masks
+            // split masks
             var [start, ...masks] = line.trim().split("/");
             
+            // cycle through masks
             for (var i = 0; i < masks.length; i++) {
                 const requestURL = baseURL + start + "/" + masks[i] + "?binary=true";
 
@@ -211,7 +217,7 @@ async function processData (event) {
                     try {
                         // calculate the new network address based on the
                         // current broadcast address
-                        brd = temp.address.broadcast_address.split(".");
+                        var brd = temp.address.broadcast_address.split(".");
                         brd[3] = Number.parseInt(brd[3]) + 1;
 
                         if (brd[3] > 255) {
