@@ -1,3 +1,5 @@
+import { Address } from "/js/structs/address.js";
+
 // CHOSEN API: https://networkcalc.com/api/docs
 const baseURL = "https://networkcalc.com/api/ip/";
 
