@@ -5,7 +5,13 @@ export class Address {
         return Address.addressMatcher.test(addr);
     }
 
-    // Dotted TO Binary
+    static isNetID (addr, mask) {
+        if (!Address.isValid(addr)) throw new Error(`invalid address input: ${addr} is not a valid dotted-decimal address`);
+
+        return 0 == (Address.dtob(addr) & BigInt(Math.pow(2, 32 - mask) - 1));
+    }
+
+    // Dotted TO BigInt
     static dtob (addr) {
         if (!Address.isValid(addr)) throw new Error(`invalid address input: ${addr} is not a valid dotted-decimal address`);
         var addr = addr.split(".");
@@ -17,7 +23,7 @@ export class Address {
         return (BigInt(addr[0]) << 24n) + (BigInt(addr[1]) << 16n) + (BigInt(addr[2]) << 8n) + BigInt(addr[3]);
     }
 
-    // Binary TO Dotted
+    // BigInt TO Dotted
     static btod (addr) {
         if (!(typeof addr === "bigint")) throw new Error(`invalid input ${addr.toString()}`);
 
