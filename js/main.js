@@ -1,4 +1,5 @@
 import { Address } from "./structs/address.js";
+import { AddressField, EntryList, Subnet } from "./structs/entries.js";
 
 // CHOSEN API: https://networkcalc.com/api/docs
 const baseURL = "https://networkcalc.com/api/ip/";
@@ -24,103 +25,27 @@ const binarySw = document.querySelector("#binarySw");
 submitBtn.addEventListener("click", processData);
 guidedInput.submitBtn.addEventListener("click", addDataInput);
 
-// data holder
-let data = [];
+// pattern for cidr + number of nets matcher
+const inputMatcher = /^((?:\b(?:[01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\.){3}\b(?:[01]?[0-9][0-9]?|2[0-4][0-9]|25[0-5]))\/([0-2][0-9]?|3[0-2])(?:\*([0-9]+))?$/;
 
 // after initializing attach used functions to main window
 window.displayData     = displayData;
 window.expandAllData   = expandAllData;
 window.collapseAllData = collapseAllData;
-window.updateDataView  = updateDataView;
 window.addDataInput    = addDataInput;
 window.processData     = processData;
-window.data            = data;
 
 function displayData (data) {
     outputDiv.innerHTML = "";
-    let swId = 0;
-    // TODO  refactor table building using divs
-    for (let i = 0; i < data.length; i++) {
-        var subnet = data[i];
-        //const binary = subnet.address.hasOwnProperty("binary");
-        const binary = binarySw.checked;
 
-        if (subnet.status == "error") {
-            outputDiv.innerHTML += 
-                `<div class='dataDisplayTable'>
-                    <span>${subnet.error}</span>
-                </div>`;
-        } else if (subnet.status == "line") {
-            outputDiv.innerHTML += `<hr>`;
-        } else if (subnet.status == "ok") {
-            document.querySelector("#dataControl").classList = [];
-
-            let tableTemp = 
-                `<div class='dataDisplayTable' id='data-${swId}'>
-                    <div class='titleHolder'>
-                        <div class='tableTitle'>
-                            <span>
-                                CIDR: ${subnet.data.address["cidr_notation"]};
-                            </span>
-                            <span>
-                                subnet bits: ${subnet.data.address["subnet_bits"]};
-                            </span>
-                            <span>
-                                assignable hosts: ${subnet.data.address["assignable_hosts"]}
-                            </span>
-                        </div>
-                        <div class='switchOption'>
-                            <span>show data</span>
-                            <input type='checkbox' name='dataSw' id='dataSw-${swId}' onchange='updateDataView(${swId})'/>
-                        </div>
-                    </div>
-                    <table class='hidden'>
-                        <tr>
-                            <th>DATA</th>
-                            <th>DOTTED DECIMAL</th>
-                            ${binary ? `<th>BINARY</th>` : ``}
-                        </tr>
-                        <tr class="greyRow">
-                            <td>network address</td>
-                            <td>${subnet.data.address["network_address"]}</td>
-                            ${binary ? `<td>${subnet.data.address.binary["network_address"]}</td>` : ``}
-                        </tr>
-                        <tr>
-                            <td>broadcast</td>
-                            <td>${subnet.data.address["broadcast_address"]}</td>
-                            ${binary ? `<td>${subnet.data.address.binary["broadcast_address"]}</td>` : ``}
-                        </tr>
-                        <tr class="greyRow">
-                            <td>first host</td>
-                            <td>${subnet.data.address["first_assignable_host"]}</td>
-                            ${binary ? `<td>${subnet.data.address.binary["first_assignable_host"]}` : ``}</td>
-                        </tr>
-                        <tr>
-                            <td>last host</td>
-                            <td>${subnet.data.address["last_assignable_host"]}</td>
-                            ${binary ? `<td>${subnet.data.address.binary["last_assignable_host"]}</td>` : ``}
-                        </tr>
-                        <tr class="greyRow">
-                            <td>subnet mask</td>
-                            <td>${subnet.data.address["subnet_mask"]}</td>
-                            ${binary ? `<td>${subnet.data.address.binary["subnet_mask"]}</td>` : ``}
-                        </tr>
-                        <tr>
-                            <td>wildcard mask</td>
-                            <td>${subnet.data.address["wildcard_mask"]}</td>
-                            ${binary ? `<td>${subnet.data.address.binary["wildcard_mask"]}</td>` : ``}
-                        </tr>
-                    </table>
-                </div>`;
-            
-            outputDiv.innerHTML += tableTemp;
-            swId++;
-        } else {
-            outputDiv.innerHTML += 
-                `<div class='dataDisplayTable'>
-                    <span>${subnet}</span>
-                </div>`;
+    if (!(data instanceof Array)) throw new Error(`invalid data structure: ${data}`);
+    
+    document.querySelector("#dataControl").classList = [];
+    for (const entry of data) {
+        for (const subnet of entry.subnets) {
+            outputDiv.appendChild(subnet.HTMLDataStructure);
         }
+        outputDiv.appendChild(document.createElement('hr'));
     }
 }
 
@@ -128,7 +53,7 @@ function expandAllData () {
     const switches = document.querySelectorAll('input[name=dataSw]')
     for (var i = 0; i < switches.length; i++) {
         switches[i].checked = true;
-        updateDataView(i);
+        switches[i].dispatchEvent(new Event('change'));
     }
 }
 
@@ -136,15 +61,8 @@ function collapseAllData () {
     const switches = document.querySelectorAll('input[name=dataSw]')
     for (var i = 0; i < switches.length; i++) {
         switches[i].checked = false;
-        updateDataView(i);
+        switches[i].dispatchEvent(new Event('change'));
     }
-}
-
-function updateDataView (id) {
-    if (document.querySelector(`#dataSw-${id}`).checked)
-        document.querySelector(`#data-${id} table`).classList = [];
-    else
-        document.querySelector(`#data-${id} table`).classList = ["hidden"];
 }
 
 function addDataInput (event) {
@@ -186,81 +104,69 @@ function addDataInput (event) {
     console.log(startingNet)
 } 
 
+function generateURL(start, mask, num) {
+    let next = Address.calculateNextNetID(start, mask);
+    if (num > 1) {
+        return `${start}/${mask},${generateURL(next, mask, num - 1)}`;
+    } else {
+        return `${start}/${mask}`;
+    }
+}
+
 async function processData (event) {
     event.preventDefault();
     outputDiv.innerHTML = "";
-    
+
     if (addressInput.value.trim() != "") {
-        var raw  = addressInput.value.trim();
-        data = []
-        
+        let data = [];
+
         // cycle through subnet entries
-        for (const line of raw.split("\n")) {
-            // split masks
-            var [start, ...masks] = line.trim().split("/");
-            
-            // cycle through masks
-            for (var i = 0; i < masks.length; i++) {
-                const requestURL = baseURL + start + "/" + masks[i] + "?binary=true";
+        for (const line of addressInput.value.trim().split("\n")) {
 
-                var temp = await fetch(requestURL).then(
-                    // parse the final useful data
-                    response => response.json()
-                );
-                
-                if (temp.status == "INVALID_ADDRESS") {
-                    data.push({
-                        status: "error",
-                        error: `invalid address ${start + "/" + masks[i]}`
-                    });
-                } else if (temp.status == "OK") {
-                    try {
-                        // calculate the new network address based on the
-                        // current broadcast address
-                        var brd = temp.address.broadcast_address.split(".");
-                        brd[3] = Number.parseInt(brd[3]) + 1;
-
-                        if (brd[3] > 255) {
-                            brd[3] = 0;
-                            brd[2] = Number.parseInt(brd[2]) + 1;
-
-                            if (brd[2] > 255) {
-                                brd[2] = 0;
-                                brd[1] = Number.parseInt(brd[1]) + 1;
-
-                                if (brd[1] > 255) {
-                                    brd[1] = 0;
-                                    brd[0] = Number.parseInt(brd[0]) + 1;
-
-                                    if (brd[0] > 255) {
-                                        data.push({
-                                            status: "error",
-                                            error:`invalid next address (${brd.join(".")})`
-                                        });
-                                    }
-                                }
-                            }
-                        }
-
-                        start = brd.join(".");
-                        data.push({
-                            status: "ok",
-                            data: temp
-                        });
-                    } catch (ex) {
-                        data.push(ex);
-                    }
-                } else {
-                    data.push({
-                        status: "error",
-                        error: `invalid return code ${temp.toString}`
-                    });
-                }
-
-                displayData(data);
+            if (!(inputMatcher.test(line))) {
+                outputDiv.innerHTML = `<h3>invalid input: '${line}'</h3>`;
+                return;
             }
-            data.push({status: "line"});
+
+            let [_, start, mask, num] = inputMatcher.exec(line);
+            let response;
+            try {
+                response = await fetch(`${baseURL}${generateURL(start, mask, num)}?binary=true`).then(res => res.json());
+            } catch (ex) {
+                outputDiv.innerHTML = ex;
+                return;
+            }
+
+            let entryList = new EntryList();
+            for (const subnet of response.address) {
+                entryList.addEntry(
+                    new Subnet(
+                        new AddressField(
+                            subnet.wildcard_mask,
+                            subnet.subnet_mask,
+                            subnet.first_assignable_host,
+                            subnet.last_assignable_host,
+                            subnet.broadcast_address,
+                            subnet.network_address,
+                            subnet.cidr_notation 
+                        ),
+                        new AddressField(
+                            subnet.binary.wildcard_mask,
+                            subnet.binary.subnet_mask,
+                            subnet.binary.first_assignable_host,
+                            subnet.binary.last_assignable_host,
+                            subnet.binary.broadcast_address,
+                            subnet.binary.network_address,
+                            null
+                        ),
+                        subnet.subnet_bits
+                    )
+                );
+            }
+            data.push(entryList);
         }
+
+        displayData(data);
     } else {
         outputDiv.innerHTML = "<h3>No input data</h3>";
     }
