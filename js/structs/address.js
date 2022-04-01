@@ -20,9 +20,6 @@ export class Address {
         var baddr = Address.dtob(addr);
         var nextID = baddr + BigInt( Math.pow(2, 32 - mask) );
 
-        console.log(baddr);
-        console.log(nextID);
-
         // overflow has occurred
         if (nextID > Address.dtob("255.255.255.255")) throw new OverflowError("next network ID has overflowed");
 
