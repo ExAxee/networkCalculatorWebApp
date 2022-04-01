@@ -1,8 +1,8 @@
 # Web application to calculate subnets
 
-This is a web app used to calculate subnets, in the input textboxt just insert a starting netwrok id and then all the masks you want to calculate sequentially.
+This is a web app used to calculate subnets
 
-To calculate another subnet insert another row as before.
+To calculate a subnet insert rows in the main text box like this: `<net-id>/<mask>[*<number of networks>]`
 
 Used APIs:
 - [networkcalc](http://networkcalc.com/) for the calculation
