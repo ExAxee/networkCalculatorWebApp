@@ -1,5 +1,8 @@
 import { AddressField } from "./entries.js";
 
+/**
+ * Represents the HTML table associated with a Subnet
+ */
 export class EntryStructure {
     // html structure of the table
     html;
@@ -15,7 +18,7 @@ export class EntryStructure {
     binaryFields;
     mask;
 
-    // data slots saved
+    // data slots saved to be easier to change
     _binaryDataSlots = {
         title: null,
         netID: null,
@@ -26,6 +29,14 @@ export class EntryStructure {
         wildcardMask: null
     };
 
+    /**
+     * 
+     * @param {AddressField} numericalFields All data related to the network expressed in dotted-decimal notation
+     * @param {AddressField} binaryFields All data related to the network expressed in binary
+     * @param {Number} mask The mask of the network
+     * @param {Number} assignableHosts The number of hosts that can coexist
+     * @returns The HTML table that represents this data
+     */
     constructor (numericalFields, binaryFields, mask, assignableHosts) {
         if (!(numericalFields instanceof AddressField))  throw new Error(`invalid numerical field ${numericalFields}`);
         if (!(binaryFields    instanceof AddressField))  throw new Error(`invalid binary field ${binaryFields}`);
@@ -171,6 +182,9 @@ export class EntryStructure {
         return this.html;
     }
 
+    /**
+     * Toggles the visibility of the main table
+     */
     switchDataShow () {
         if (this._showDataSw.checked) {
             this._table.classList.remove('hidden');
@@ -179,6 +193,9 @@ export class EntryStructure {
         }
     }
     
+    /**
+     * Toggles the visibility of binary data
+     */
     switchBinShow () {
         if (this._showDataBinSw.checked) {
             for (const item in this._binaryDataSlots) {

@@ -35,20 +35,28 @@ window.collapseAllData = collapseAllData;
 window.addDataInput    = addDataInput;
 window.processData     = processData;
 
+/**
+ * Displays the data entered into the main output container
+ * @param {EntryList[]} data The data to display
+ */
 function displayData (data) {
     outputDiv.innerHTML = "";
 
     if (!(data instanceof Array)) throw new Error(`invalid data structure: ${data}`);
     
+    // make expand/collapse button appear
     document.querySelector("#dataControl").classList = [];
-    for (const entry of data) {
-        for (const subnet of entry.subnets) {
+    for (const entryGroup of data) {
+        for (const subnet of entryGroup.subnets) {
             outputDiv.appendChild(subnet.HTMLDataStructure);
         }
         outputDiv.appendChild(document.createElement('hr'));
     }
 }
 
+/**
+ * Expands all subnets tables
+ */
 function expandAllData () {
     const switches = document.querySelectorAll('input[name=dataSw]')
     for (var i = 0; i < switches.length; i++) {
@@ -57,6 +65,9 @@ function expandAllData () {
     }
 }
 
+/**
+ * Collapses all subnets tables
+ */
 function collapseAllData () {
     const switches = document.querySelectorAll('input[name=dataSw]')
     for (var i = 0; i < switches.length; i++) {
@@ -65,6 +76,10 @@ function collapseAllData () {
     }
 }
 
+/**
+ * Checks and adds the inserted guided input values
+ * @param {*} event 
+ */
 function addDataInput (event) {
     event.preventDefault();
 
@@ -101,18 +116,28 @@ function addDataInput (event) {
     }
 
     addressInput.value += `${startingNet}/${mask}*${numberOfNets}\n`;
-    console.log(startingNet)
 } 
 
-function generateURL(start, mask, num) {
+/**
+ * Generate a list of addresses to be put into the URL
+ * @param {String} start Starting net ID
+ * @param {Number} mask Mask of the starting net ID
+ * @param {Number} desiredNets Number of desired networks
+ * @returns A string with all the networks concatenated
+ */
+function generateURL(start, mask, desiredNets) {
     let next = Address.calculateNextNetID(start, mask);
-    if (num > 1) {
-        return `${start}/${mask},${generateURL(next, mask, num - 1)}`;
+    if (desiredNets > 1) {
+        return `${start}/${mask},${generateURL(next, mask, desiredNets - 1)}`;
     } else {
         return `${start}/${mask}`;
     }
 }
 
+/**
+ * Checks, processes and fetches the data from the API 
+ * @param {*} event 
+ */
 async function processData (event) {
     event.preventDefault();
     outputDiv.innerHTML = "";
