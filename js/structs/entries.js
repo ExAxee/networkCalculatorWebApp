@@ -1,12 +1,20 @@
+import { EntryStructure } from "./entryStructure.js";
+
 export class EntryList {
     subnets = [];
 
-    constructor (subnetList) {
+    constructor (subnetList = []) {
         for (let i = 0; i < subnetList.length; i++) {
             if (!(subnetList[i] instanceof Subnet)) throw new Error(`invalid subnet at index ${i}: ${subnetList[i]} in ${subnetList}`);
 
             this.subnets.push(subnetList[i]);
         }
+    }
+
+    addEntry (subnet) {
+        if (!(subnet instanceof Subnet)) throw new Error(`invalid subnet: ${subnet}`);
+
+        this.subnets.push(subnet);
     }
 }
 
@@ -43,6 +51,8 @@ export class AddressField {
 }
 
 export class Subnet {
+    HTMLDataStructure;
+
     assignableHosts;
     subnetMaskBits;
     
@@ -59,6 +69,12 @@ export class Subnet {
         
         this.numerical = numericalFields;
         this.binary    = binaryFields;
+
+        this.HTMLDataStructure = new EntryStructure(
+            this.numerical,
+            this.binary,
+            mask,
+            this.assignableHosts
+        );
     }
 }
-
