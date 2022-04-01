@@ -82,6 +82,7 @@ function collapseAllData () {
  */
 function addDataInput (event) {
     event.preventDefault();
+    let valid = true;
 
     // retrieve data
     const numberOfNets = guidedInput.numberOfNets.value.trim();
@@ -93,6 +94,7 @@ function addDataInput (event) {
         isNaN(mask) || !mask || mask <= 0 || mask > 32
     ) {
         guidedInput.mask.classList.add("inputError");
+        valid = false;
     } else {
         guidedInput.mask.classList.remove("inputError");
     }
@@ -101,6 +103,7 @@ function addDataInput (event) {
     if (
         !Address.isNetID(startingNet, mask) // don't check if address is valid because Address.isNetID checks it
     ) {
+        valid = false;
         guidedInput.startAddr.classList.add("inputError");
     } else {
         guidedInput.startAddr.classList.remove("inputError");
@@ -110,12 +113,13 @@ function addDataInput (event) {
     if (
         isNaN(numberOfNets) || !numberOfNets
     ) {
+        valid = false;
         guidedInput.numberOfNets.classList.add("inputError");
     } else {
         guidedInput.numberOfNets.classList.remove("inputError");
     }
 
-    addressInput.value += `${startingNet}/${mask}*${numberOfNets}\n`;
+    if (valid) addressInput.value += `${startingNet}/${mask}*${numberOfNets}\n`;
 } 
 
 /**
