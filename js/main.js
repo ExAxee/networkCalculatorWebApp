@@ -167,28 +167,54 @@ async function processData (event) {
             }
 
             let entryList = new EntryList();
-            for (const subnet of response.address) {
+            if (response.address instanceof Array) {
+                for (const subnet of response.address) {
+                    entryList.addEntry(
+                        new Subnet(
+                            new AddressField(
+                                subnet.wildcard_mask,
+                                subnet.subnet_mask,
+                                subnet.first_assignable_host,
+                                subnet.last_assignable_host,
+                                subnet.broadcast_address,
+                                subnet.network_address,
+                                subnet.cidr_notation 
+                            ),
+                            new AddressField(
+                                subnet.binary.wildcard_mask,
+                                subnet.binary.subnet_mask,
+                                subnet.binary.first_assignable_host,
+                                subnet.binary.last_assignable_host,
+                                subnet.binary.broadcast_address,
+                                subnet.binary.network_address,
+                                null
+                            ),
+                            subnet.subnet_bits
+                        )
+                    );
+                }
+            } else {
                 entryList.addEntry(
                     new Subnet(
                         new AddressField(
-                            subnet.wildcard_mask,
-                            subnet.subnet_mask,
-                            subnet.first_assignable_host,
-                            subnet.last_assignable_host,
-                            subnet.broadcast_address,
-                            subnet.network_address,
-                            subnet.cidr_notation 
+                            response.address.wildcard_mask,
+                            response.address.subnet_mask,
+                            response.address.first_assignable_host,
+                            response.address.last_assignable_host,
+                            response.address.broadcast_address,
+                            response.address.network_address,
+                            response.address.cidr_notation 
                         ),
                         new AddressField(
-                            subnet.binary.wildcard_mask,
-                            subnet.binary.subnet_mask,
-                            subnet.binary.first_assignable_host,
-                            subnet.binary.last_assignable_host,
-                            subnet.binary.broadcast_address,
-                            subnet.binary.network_address,
+                            response.address.binary.wildcard_mask,
+                            response.address.binary.subnet_mask,
+                            response.address.binary.first_assignable_host,
+                            response.address.binary.last_assignable_host,
+                            response.address.binary.broadcast_address,
+                            response.address.binary.network_address,
                             null
                         ),
-                        subnet.subnet_bits
+                        response.address.subnet_bits
                     )
                 );
             }
