@@ -111,15 +111,15 @@ function addDataInput (event) {
 
     // check number of requested networks input
     if (
-        isNaN(numberOfNets) || !numberOfNets
+        numberOfNets < 0 | isNaN(numberOfNets) | !Number.isInteger(numberOfNets)
     ) {
         valid = false;
         guidedInput.numberOfNets.classList.add("inputError");
     } else {
         guidedInput.numberOfNets.classList.remove("inputError");
-    }
+    } 
 
-    if (valid) addressInput.value += `${startingNet}/${mask}*${numberOfNets}\n`;
+    if (valid) addressInput.value += `${startingNet}/${mask}*${numberOfNets ? numberOfNets : 1}\n`;
 } 
 
 /**
@@ -158,6 +158,12 @@ async function processData (event) {
             }
 
             let [_, start, mask, num] = inputMatcher.exec(line);
+
+            if (!Address.isNetID(start, mask)) {
+                addressInput.value = addressInput.value.replace(start, Address.getNetID(start, mask));
+                start = Address.getNetID(start, mask);
+            }
+
             let response;
             try {
                 response = await fetch(`${baseURL}${generateURL(start, mask, num)}?binary=true`).then(res => res.json());
