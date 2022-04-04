@@ -31,9 +31,9 @@ export class Address {
 
     /**
      * Calculates the net ID that contains the given address
-     * @param {String} addr the address from where to calculate the net ID
-     * @param {Number} mask the mask used to calculate the net ID
-     * @returns the net ID in which the given address is
+     * @param {String} addr The address from where to calculate the net ID
+     * @param {Number} mask The mask used to calculate the net ID
+     * @returns The net ID in which the given address is
      */
     static getNetID (addr, mask) {
         if (!Address.isValid(addr)) throw new Error(`invalid address input: ${addr} is not a valid dotted-decimal address`);
