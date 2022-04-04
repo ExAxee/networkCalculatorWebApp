@@ -111,7 +111,7 @@ function addDataInput (event) {
 
     // check number of requested networks input
     if (
-        numberOfNets < 0 | isNaN(numberOfNets) | !Number.isInteger(numberOfNets)
+        isNaN(numberOfNets) | !(numberOfNets == "")
     ) {
         valid = false;
         guidedInput.numberOfNets.classList.add("inputError");
